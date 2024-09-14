@@ -1,0 +1,10 @@
+Flask
+Flask_SQLAlchemy
+Flask-WTF
+Flask-Login
+Flask-Argon2
+Flask-Migrate
+python-dotenv
+types-Flask-Migrate
+types-Werkzeug
+types-Flask
