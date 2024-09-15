@@ -3,8 +3,8 @@ from __future__ import annotations
 from typing import Any, Callable, TypeVar
 from datetime import timedelta
 
-_T = TypeVar('_T')
-_T_C = TypeVar('_T_C', bound=Callable[..., Any])
+_T = TypeVar("_T")
+_T_C = TypeVar("_T_C", bound=Callable[..., Any])
 
 
 class UserMixin:
