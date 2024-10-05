@@ -9,9 +9,7 @@
 │   │   ├── routes.py
 │   │   ├── static
 │   │   └── templates
-│   │       ├── base.html
-│   │       ├── login.html
-│   │       └── register.html
+│   │       └── base.html
 │   ├── auth
 │   │   ├── forms.py
 │   │   ├── __init__.py
@@ -68,6 +66,7 @@
 │   ├── test_auth.py
 │   ├── test_create_admin.py
 │   ├── test_errors.py
+│   ├── test_admin.py
 │   └── test_main.py
 └── wsgi.py
 ```
