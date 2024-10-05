@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Flask Migrations
+migrations/
+
 # C extensions
 *.so
 

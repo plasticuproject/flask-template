@@ -53,6 +53,7 @@ class User(Model, UserMixin):
                                           nullable=False,
                                           unique=True)
     password: Mapped[str] = mapped_column(String(150), nullable=False)
+    created: Mapped[datetime] = mapped_column(DateTime)
     failed_attempts: Mapped[int] = mapped_column(default=0)
     lockout_until: Mapped[datetime | None] = mapped_column(DateTime,
                                                            nullable=True)
@@ -62,6 +63,7 @@ class User(Model, UserMixin):
         self.username = username
         self.password = password
         self.is_admin = is_admin
+        self.created = datetime.utcnow()
 
     def __repr__(self) -> str:
         return f"<User {self.username}>"

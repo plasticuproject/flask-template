@@ -1,6 +1,6 @@
 """routes.py"""
 from __future__ import annotations
-from flask import redirect, url_for, flash
+from flask import redirect, url_for, flash, render_template
 from flask_login import login_required, current_user
 from werkzeug.wrappers import Response
 from extensions import db
@@ -8,7 +8,7 @@ from models import User
 from . import admin_bp
 
 
-@admin_bp.route("/admin/reset_lockout/<int:user_id>", methods=["POST"])
+@admin_bp.route("/reset_lockout/<int:user_id>", methods=["POST"])
 @login_required
 def reset_lockout(user_id: str) -> str | Response:
     """
@@ -35,4 +35,5 @@ def reset_lockout(user_id: str) -> str | Response:
     user.lockout_until = None
     db.session.commit()
     flash(f"Lockout reset for user {user.username}.", "success")
-    return redirect(url_for("admin.user_management"))
+    # return redirect(url_for("admin.user_management"))
+    return redirect(url_for("main.home"))

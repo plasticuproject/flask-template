@@ -8,3 +8,6 @@ python-dotenv
 types-Flask-Migrate
 types-Werkzeug
 types-Flask
+pytest
+pytest-flask
+pytest-cov

@@ -1,4 +1,4 @@
-# WIP Flast Project Template
+# WIP FlasK Project Template
 
 ## Project Structure
 ```
@@ -9,9 +9,7 @@
 │   │   ├── routes.py
 │   │   ├── static
 │   │   └── templates
-│   │       ├── base.html
-│   │       ├── login.html
-│   │       └── register.html
+│   │       └── base.html
 │   ├── auth
 │   │   ├── forms.py
 │   │   ├── __init__.py
@@ -39,18 +37,21 @@
 │           └── home.html
 ├── config.py
 ├── create_admin.py
+├── env
 ├── extensions.py
 ├── models.py
 ├── mypy.ini
+├── pytest.ini
 ├── README.md
 ├── requirements.txt
-├── site.db
 ├── stubs
 │   ├── flask_argon2
 │   │   └── __init__.pyi
 │   ├── flask_login
 │   │   └── __init__.pyi
 │   ├── flask_sqlalchemy
+│   │   └── __init__.pyi
+│   ├── flask_testing
 │   │   └── __init__.pyi
 │   ├── flask_wtf
 │   │   ├── csrf.pyi
@@ -60,6 +61,13 @@
 │       │   └── core.pyi
 │       ├── __init__.pyi
 │       └── validators.pyi
+├── tests
+│   ├── conftest.py
+│   ├── test_auth.py
+│   ├── test_create_admin.py
+│   ├── test_errors.py
+│   ├── test_admin.py
+│   └── test_main.py
 └── wsgi.py
 ```
 
@@ -111,6 +119,12 @@
 - **create_admin.py**: A script to create an admin user if required during the 
   initial setup.
 
+- **tests/**: Contains unit tests and integration tests for the application. 
+  This directory includes tests for various parts of the application, such as 
+  authentication, error handling, and route functionality. Tests are typically 
+  written using pytest and may utilize fixtures (defined in conftest.py) to set 
+  up a testing environment with a temporary database and mock objects.
+
 ## Running the Application
 
 1. Install Dependencies
@@ -134,10 +148,18 @@ set FLASK_APP=app.py
 set FLASK_ENV=development
 ```
 
-3. Initialize the Database
+3. Configure Variables and Initialize the Database
+
+Copy the contents of `env` to `.env`
+```
+cp env .env
+```
+
+Edit the `.env` file as necessary.
 
 Run the following commands to create and set up the database:
 ```
+touch site.db
 flask db init
 flask db migrate -m "Initialization"
 flask db upgrade
