@@ -1,3 +1,10 @@
+[![build](https://github.com/plasticuproject/flask-template/actions/workflows/tests.yml/badge.svg)](https://github.com/plasticuproject/flask-template/actions/workflows/tests.yml)
+[![Python 3.11](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/release/python-311/)
+![GitHub](https://img.shields.io/github/license/plasticuproject/flask-template)
+[![Coverage Status](https://coveralls.io/repos/github/plasticuproject/flask-template/badge.svg?branch=master)](https://coveralls.io/github/plasticuproject/flask-template?branch=master)
+[![CodeQL](https://github.com/plasticuproject/flask-template/actions/workflows/codeql.yml/badge.svg)](https://github.com/plasticuproject/flask-template/actions/workflows/codeql.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=plasticuproject_flask-template&metric=alert_status)](https://sonarcloud.io/dashboard?id=plasticuproject_flask-template)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=plasticuproject_flask-template&metric=security_rating)](https://sonarcloud.io/dashboard?id=plasticuproject_flask-template)
 # WIP FlasK Project Template
 
 ## Project Structure
