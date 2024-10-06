@@ -35,5 +35,4 @@ def reset_lockout(user_id: str) -> str | Response:
     user.lockout_until = None
     db.session.commit()
     flash(f"Lockout reset for user {user.username}.", "success")
-    # return redirect(url_for("admin.user_management"))
     return redirect(url_for("main.home"))
