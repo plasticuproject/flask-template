@@ -1,6 +1,6 @@
 """models.py"""
 from __future__ import annotations
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import TYPE_CHECKING, cast
 from flask_login import UserMixin
 from sqlalchemy.orm import Mapped, mapped_column
@@ -63,7 +63,7 @@ class User(Model, UserMixin):
         self.username = username
         self.password = password
         self.is_admin = is_admin
-        self.created = datetime.utcnow()
+        self.created = datetime.now(timezone.utc)
 
     def __repr__(self) -> str:
         return f"<User {self.username}>"

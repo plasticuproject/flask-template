@@ -23,6 +23,9 @@ def generate_random_password(length: int = 20) -> str:
             "Password length must be at least 4 to include all character types"
         )
 
+    # Create a SystemRandom instance
+    secure_random = random.SystemRandom()
+
     # Separate character pools
     lower = string.ascii_lowercase
     upper = string.ascii_uppercase
@@ -33,15 +36,16 @@ def generate_random_password(length: int = 20) -> str:
 
     # Ensure password contains at least one of each required character type
     password = [
-        random.choice(lower),
-        random.choice(upper),
-        random.choice(digits),
-        random.choice(punctuation)
+        secure_random.choice(lower),
+        secure_random.choice(upper),
+        secure_random.choice(digits),
+        secure_random.choice(punctuation)
     ]
 
-    # Fill the rest of the password length with random characters from all pools
+    # Fill the rest of the password length
+    #   with random characters from all pools
     all_characters = lower + upper + digits + punctuation
-    password += random.choices(all_characters, k=length - 4)
+    password += secure_random.choices(all_characters, k=length - 4)
 
     # Shuffle the password list to avoid predictable placement of characters
     random.shuffle(password)

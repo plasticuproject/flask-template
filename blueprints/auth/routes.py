@@ -1,6 +1,6 @@
 """routes.py"""
 from __future__ import annotations
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.wrappers import Response
@@ -11,6 +11,7 @@ from .forms import RegistrationForm, LoginForm
 
 LOCKOUT_THRESHOLD = 5  # Maximum allowed failed attempts
 LOCKOUT_DURATION = timedelta(minutes=15)  # Lockout duration
+MAIN_HOME = "main.home"
 
 
 @auth_bp.route("/register", methods=["GET", "POST"])
@@ -30,7 +31,7 @@ def register() -> str | Response:
         registration page.
     """
     if current_user.is_authenticated:
-        return redirect(url_for("main.home"))
+        return redirect(url_for(MAIN_HOME))
 
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -65,12 +66,13 @@ def login() -> str | Response:
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
+        now = datetime.now(timezone.utc)
 
         # Check if user exists
         if user:
             # Check if account is locked
-            if user.lockout_until and user.lockout_until > datetime.utcnow():
-                remaining = user.lockout_until - datetime.utcnow()
+            if user.lockout_until and user.lockout_until > now:
+                remaining = user.lockout_until - now
                 flash(
                     "Account is locked. Try again in "
                     f"{remaining.seconds // 60} minutes.", "danger")
@@ -86,14 +88,14 @@ def login() -> str | Response:
                 login_user(user)
                 flash("Logged in successfully.", "success")
                 next_page = request.args.get("next")
-                return redirect(next_page) if next_page else redirect(
-                    url_for("main.home"))
+                return redirect(url_for(next_page)) if next_page else redirect(
+                    url_for(MAIN_HOME))
 
             # Increment failed attempts
             user.failed_attempts += 1
 
             if user.failed_attempts >= LOCKOUT_THRESHOLD:
-                user.lockout_until = datetime.utcnow() + LOCKOUT_DURATION
+                user.lockout_until = now + LOCKOUT_DURATION
                 flash(
                     "Account locked due to too many failed login "
                     "attempts. Please try again later.", "danger")
@@ -125,4 +127,4 @@ def logout() -> str | Response:
     """
     logout_user()
     flash("You have been logged out.", "info")
-    return redirect(url_for("main.home"))
+    return redirect(url_for(MAIN_HOME))

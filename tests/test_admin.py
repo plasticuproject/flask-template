@@ -1,7 +1,7 @@
 """test_admin.py"""
 from __future__ import annotations
 from typing import Any
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from extensions import db, argon2
 from create_admin import generate_random_password
 from models import User
@@ -14,6 +14,7 @@ def generate_accounts() -> tuple[str, str]:
     admin_username = "testadmin"
     admin_password = generate_random_password()
     hashed_admin_password = argon2.generate_password_hash(admin_password)
+    now = datetime.now(timezone.utc)
 
     # Create new admin user
     new_admin = User(username=admin_username,
@@ -24,7 +25,7 @@ def generate_accounts() -> tuple[str, str]:
     test_user = User.query.filter_by(username="testuser").first()
     if test_user:
         test_user.failed_attempts = 5
-        test_user.lockout_until = datetime.utcnow() + timedelta(minutes=15)
+        test_user.lockout_until = now + timedelta(minutes=15)
 
     db.session.commit()
 
