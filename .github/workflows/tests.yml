@@ -53,6 +53,7 @@ jobs:
     - name: Run Pytest
       run: |
         mkdir coverage
+        cp env .env
         pytest
 
     - name: Coveralls
