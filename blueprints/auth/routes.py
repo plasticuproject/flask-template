@@ -13,6 +13,7 @@ from .forms import RegistrationForm, LoginForm
 LOCKOUT_THRESHOLD = 5  # Maximum allowed failed attempts
 LOCKOUT_DURATION = timedelta(minutes=15)  # Lockout duration
 MAIN_HOME = "main.home"
+allowed_next_page = ["/dashboard"]
 
 
 def is_safe_url(target: str) -> bool:
@@ -28,7 +29,8 @@ def is_safe_url(target: str) -> bool:
     host_url = urlparse(request.host_url)
     redirect_url = urlparse(urljoin(request.host_url, target))
     return redirect_url.scheme in ('http', 'https') and \
-        host_url.netloc == redirect_url.netloc
+        host_url.netloc == redirect_url.netloc and \
+        target in allowed_next_page
 
 
 @auth_bp.route("/register", methods=["GET", "POST"])
@@ -47,20 +49,18 @@ def register() -> str | Response:
         registration. If the registration form is invalid, renders the
         registration page.
     """
-    if request.method == "GET":
-        if current_user.is_authenticated:
-            return redirect(url_for(MAIN_HOME))
+    if request.method == "GET" and current_user.is_authenticated:
+        return redirect(url_for(MAIN_HOME))
 
     form = RegistrationForm()
-    if request.method == "POST":
-        if form.validate_on_submit():
-            hashed_password = argon2.generate_password_hash(form.password.data)
-            new_user = User(username=form.username.data,
-                            password=hashed_password)
-            db.session.add(new_user)
-            db.session.commit()
-            flash("Account created successfully! Please log in.", "success")
-            return redirect(url_for("auth.login"))
+    if request.method == "POST" and form.validate_on_submit():
+        hashed_password = argon2.generate_password_hash(form.password.data)
+        new_user = User(username=form.username.data, password=hashed_password)
+        db.session.add(new_user)
+        db.session.commit()
+        flash("Account created successfully! Please log in.", "success")
+        return redirect(url_for("auth.login"))
+
     return render_template("register.html", form=form)
 
 

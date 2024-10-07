@@ -6,6 +6,7 @@ from flask import url_for
 
 LOCKOUT_THRESHOLD = 5  # Maximum allowed failed attempts
 LOCKOUT_DURATION = timedelta(minutes=15)  # Lockout duration
+TEST_USER_PASS = "TestPassword69@!"
 
 
 def test_register(client: Any) -> None:
@@ -62,7 +63,7 @@ def test_register(client: Any) -> None:
 
 
 def test_login(client: Any, auth: Any) -> None:
-    response = auth["login"]("testuser", "TestPassword69@!")
+    response = auth["login"]("testuser", TEST_USER_PASS)
     assert response.status_code == 302
 
 
@@ -92,7 +93,7 @@ def test_account_lockout(client: Any, auth: Any) -> None:
     # Create a user
     auth["register"]("lockoutuser", "SecurePassword123!")
     for _ in range(LOCKOUT_THRESHOLD):
-        response = auth["login"]("lockoutuser", "WrongPassword!")
+        _ = auth["login"]("lockoutuser", "WrongPassword!")
 
     # Account should now be locked
     response = auth["login"]("lockoutuser", "SecurePassword123!")
@@ -122,7 +123,7 @@ def test_login_next_parameter(client: Any, auth: Any) -> None:
     response = client.post("/auth/login?next=/dashboard",
                            data={
                                "username": "testuser",
-                               "password": "TestPassword69@!"
+                               "password": TEST_USER_PASS
                            },
                            follow_redirects=True)
     assert response.request.path == "/dashboard"
@@ -150,14 +151,14 @@ def test_register_missing_data(client: Any) -> None:
 
 
 def test_login_authenticated_user(client: Any, auth: Any) -> None:
-    auth["login"]("testuser", "TestPassword69@!")
+    auth["login"]("testuser", TEST_USER_PASS)
     response = client.get("/auth/login", follow_redirects=True)
     assert response.request.path == url_for("main.home")
     assert b"Home" in response.data
 
 
 def test_register_authenticated_user(client: Any, auth: Any) -> None:
-    auth["login"]("testuser", "TestPassword69@!")
+    auth["login"]("testuser", TEST_USER_PASS)
     response = client.get("/auth/register", follow_redirects=True)
     assert response.request.path == url_for("main.home")
     assert b"Home" in response.data

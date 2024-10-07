@@ -48,7 +48,7 @@ def generate_random_password(length: int = 20) -> str:
     password += secure_random.choices(all_characters, k=length - 4)
 
     # Shuffle the password list to avoid predictable placement of characters
-    random.shuffle(password)
+    secure_random.shuffle(password)
 
     return ''.join(password)
 
