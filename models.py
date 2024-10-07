@@ -55,8 +55,8 @@ class User(Model, UserMixin):
     password: Mapped[str] = mapped_column(String(150), nullable=False)
     created: Mapped[datetime] = mapped_column(DateTime)
     failed_attempts: Mapped[int] = mapped_column(default=0)
-    lockout_until: Mapped[datetime | None] = mapped_column(DateTime,
-                                                           nullable=True)
+    lockout_until: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True)
     is_admin: Mapped[bool] = mapped_column(default=False)
 
     def __init__(self, username: str, password: str, is_admin: bool = False):

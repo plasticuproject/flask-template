@@ -46,8 +46,8 @@ def runner(app: Flask) -> Any:
 
 @pytest.fixture
 def auth(
-        client: Any) -> dict[str, Callable[[str, str], Any]
-                             | Callable[[], Any]]:
+        client: Any
+) -> dict[str, Callable[[str, str], Any] | Callable[[], Any]]:
 
     def login(username: str = "testuser",
               password: str = "TestPassword69@!") -> Any:
@@ -60,4 +60,15 @@ def auth(
     def logout() -> Any:
         return client.get("/auth/logout")
 
-    return {"login": login, "logout": logout}
+    def register(username: str = "testuser",
+                 password: str = "TestPassword69@!",
+                 **kwargs: str) -> Any:
+        return client.post("/auth/register",
+                           data={
+                               "username": username,
+                               "password": password,
+                               "confirm_password": password
+                           },
+                           **kwargs)
+
+    return {"login": login, "logout": logout, "register": register}
